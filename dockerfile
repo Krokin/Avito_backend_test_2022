@@ -1,6 +1,6 @@
 FROM golang:alpine as builder
 
-WORKDIR /build
+WORKDIR /api
 
 ADD . .
 
@@ -10,6 +10,6 @@ ARG CGO_ENABLED=0
 RUN go build -a -installsuffix 'api' -o app cmd/main.go
 
 FROM alpine:latest
-COPY --from=builder /build/app .
+COPY --from=builder /api/app .
 EXPOSE 8080 8080 
 ENTRYPOINT ["./app"]

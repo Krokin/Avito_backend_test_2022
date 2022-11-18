@@ -14,6 +14,11 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+// @title Avito User Balance API
+// @version 1.0
+// @description API Server for User Balance
+// @host localhost:8080
+// @BasePath /
 func main() {
     infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
     errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
@@ -25,7 +30,7 @@ func main() {
 
     sqlbase, err := d.OpenDB(cfg.MySQL)
     if err != nil {
-        errorLog.Print(err)
+        errorLog.Fatal(err)
     }
     defer sqlbase.Close()
 
