@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   app:
-    container_name: app
+    container_name: api
     build: .
     restart: always
     volumes:
@@ -16,9 +16,12 @@ services:
     container_name: db_mysql
     ports: 
       - 3306:3306
-    environment: 
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=root
-      - MYSQL_DATABASE=avito_user_balance_api
+    environment:
+      - MYSQL_ROOT_PASSWORD=root 
+      - MYSQL_USER= "mysql"
+      - MYSQL_PASSWORD= "mysql_pass"
+      - MYSQL_DATABASE= "avito_user_balance_api"
     volumes:
-      - /var/mysql:/var/lib/mysql
+      - mysql:/var/lib/mysql
+volumes:
+  mysql:

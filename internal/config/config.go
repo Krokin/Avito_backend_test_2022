@@ -12,6 +12,6 @@ type Config struct {
 
 func GetConfig() (*Config, error) {
 	var cfg Config
-	err := cleanenv.ReadConfig("./configs/config.yml", &cfg)
+	err := cleanenv.ReadConfig("./build/configs/config.yml", &cfg)
 	return &cfg, err
 }

@@ -25,7 +25,7 @@ func main() {
 
     sqlbase, err := d.OpenDB(cfg.MySQL)
     if err != nil {
-        errorLog.Fatal(err)
+        errorLog.Print(err)
     }
     defer sqlbase.Close()
 

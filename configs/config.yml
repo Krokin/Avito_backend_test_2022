@@ -1,5 +1,5 @@
 # config.yml
 
-MySQL_dsn: "" # format {username}:{password}@/{database}
+MySQL_dsn: "mysql:mysql_pass@/avito_user_balance_api" # format {username}:{password}@/{database}
 address: 0.0.0.0
 port: 8080
