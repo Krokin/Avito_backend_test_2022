@@ -2,9 +2,7 @@ package app
 
 import (
 	"github.com/gorilla/mux"
-
     "github.com/swaggo/http-swagger"
-	// _ "github.com/swaggo/http-swagger/example/gorilla/docs"
     _ "Avito_tech_test_2022/docs"
 )
 
