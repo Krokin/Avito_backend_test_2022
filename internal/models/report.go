@@ -5,6 +5,7 @@ import (
 	"strings"
 	"strconv"
 	"fmt"
+	"encoding/json"
 
 	"github.com/gorilla/mux"
 )
@@ -15,7 +16,7 @@ type DownloadURL struct {
 }
 
 func (d *DownloadURL) FormatURL(r *ReportDate) {
-	d.URL = fmt.Sprintf(`http://127.0.0.1:4000/api/sale/sum_report/download/%d_%d`, r.Month, r.Year)
+	d.URL = fmt.Sprintf(`http://localhost:8080/api/sale/sum_report/download/%d_%d`, r.Month, r.Year)
 }
 
 type ReportDate struct {
@@ -24,6 +25,13 @@ type ReportDate struct {
 }
 
 func (d *ReportDate) DataValidation(r *http.Request) bool {
+	if d.Month == 0 {
+		err := json.NewDecoder(r.Body).Decode(&d)
+		if err != nil {
+			return false
+		}
+	}
+
 	if d.Month < 1 || d.Month > 12 {
 		return false
 	}
@@ -31,7 +39,6 @@ func (d *ReportDate) DataValidation(r *http.Request) bool {
 	if d.Year < 0 {
 		return false
 	}
-	
 	return true
 }
 

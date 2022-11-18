@@ -138,7 +138,7 @@ func (app *Application) DownloadReport(w http.ResponseWriter, r *http.Request) {
 		app.clientError(w, http.StatusBadRequest)
 		return
 	}
-
+	
 	err := m.ValidData(date, r)
 	if err == false {
 		app.clientError(w, http.StatusBadRequest)
