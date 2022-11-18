@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  app:
+    container_name: app
+    build: .
+    restart: always
+    volumes:
+      - .:/build
+    depends_on:
+      - mysql          
+    ports: 
+      - 8080:8080 
+
+  mysql:
+    image: mysql:8.0.31
+    container_name: db_mysql
+    ports: 
+      - 3306:3306
+    environment: 
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_DATABASE=avito_user_balance_api
+    volumes:
+      - /var/mysql:/var/lib/mysql
