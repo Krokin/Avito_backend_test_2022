@@ -1,0 +1,321 @@
+basePath: /
+definitions:
+  models.Balance:
+    properties:
+      balance:
+        type: number
+    type: object
+  models.DepBalance:
+    properties:
+      comment:
+        type: string
+      deposit:
+        type: number
+      user_id:
+        type: integer
+    type: object
+  models.DownloadURL:
+    properties:
+      url:
+        type: string
+    type: object
+  models.Error:
+    properties:
+      err_code:
+        type: integer
+      err_msg:
+        type: string
+    type: object
+  models.Order:
+    properties:
+      cost:
+        type: number
+      order_id:
+        type: integer
+      service_id:
+        type: integer
+      service_name:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  models.OrderID:
+    properties:
+      order_id:
+        type: integer
+    type: object
+  models.ReportDate:
+    properties:
+      month:
+        type: integer
+      year:
+        type: integer
+    type: object
+  models.Transaction:
+    properties:
+      comment:
+        type: string
+      cost:
+        type: number
+      date:
+        type: string
+      transaction_id:
+        type: integer
+      type_transaction:
+        type: string
+    type: object
+  models.UserID:
+    properties:
+      user_id:
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API Server for User Balance
+  title: Avito User Balance API
+  version: "1.0"
+paths:
+  /api/sale/reserve:
+    post:
+      consumes:
+      - application/json
+      description: reserving funds from the user's balance
+      operationId: reserve
+      parameters:
+      - description: data order
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.Order'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Error'
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: Reserve
+      tags:
+      - sale
+  /api/sale/reserve_out:
+    post:
+      consumes:
+      - application/json
+      description: return of reserved funds to the user
+      operationId: reserveout
+      parameters:
+      - description: order id
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.OrderID'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Error'
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: ReserveOut
+      tags:
+      - sale
+  /api/sale/revenue:
+    post:
+      consumes:
+      - application/json
+      description: profit recognition
+      operationId: revenue
+      parameters:
+      - description: order id
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.OrderID'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Error'
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: Revenue
+      tags:
+      - sale
+  /api/sale/sum_report:
+    post:
+      consumes:
+      - application/json
+      description: getting a link to a file for a report
+      operationId: sum_report
+      parameters:
+      - description: date for report
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.ReportDate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.DownloadURL'
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: SumReport
+      tags:
+      - sale
+  /api/sale/sum_report/download/{date}:
+    get:
+      consumes:
+      - application/json
+      description: download report
+      operationId: sum_report_download
+      parameters:
+      - description: date for report
+        format: month_year
+        in: query
+        name: date
+        required: true
+        type: string
+      produces:
+      - multipart/form-data
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                type: string
+              type: array
+            type: array
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: SumReport_Download
+      tags:
+      - sale
+  /api/ub/deposit_balance:
+    post:
+      consumes:
+      - application/json
+      description: deposit user balance
+      operationId: deposit-balance
+      parameters:
+      - description: user id, sum deposit, comment
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.DepBalance'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Error'
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: DepositBalance
+      tags:
+      - user_balance
+  /api/ub/get_balance:
+    post:
+      consumes:
+      - application/json
+      description: get user balance
+      operationId: get-balance
+      parameters:
+      - description: user id
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserID'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Balance'
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: GetBalance
+      tags:
+      - user_balance
+  /api/ub/history_transactions:
+    get:
+      consumes:
+      - application/json
+      description: history user transaction
+      operationId: history_transaction
+      parameters:
+      - description: user id
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: page number
+        in: query
+        name: page_no
+        required: true
+        type: integer
+      - description: page size (max 100)
+        in: query
+        name: page_size
+        required: true
+        type: integer
+      - description: cost or date
+        format: cost/date
+        in: query
+        name: sort
+        required: true
+        type: string
+      - description: ASC = true, DESC = false
+        in: query
+        name: ascending
+        required: true
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Transaction'
+            type: array
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: HistoryTransaction
+      tags:
+      - sale
+swagger: "2.0"
